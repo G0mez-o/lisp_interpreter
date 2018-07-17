@@ -25,16 +25,15 @@ std::string eval(std::string str, int num, std::string check)
 
   std::cout << "----- start to get operator -----" << std::endl;
 
-  for (; *iter != ' ' ||  iter != str.end() ; ++iter)
+  for (; *iter != ' '; ++iter)
   {
     oper += *iter;
+    std::cout << "oper:" << oper << std::endl;
   }
 
   std::cout << "----- end to get operator -----" << std::endl;
 
-  std::cout << "oper:" << oper << std::endl;
-
-  if (oper != "+" && oper != "-" && oper != "*" && oper != "/") { std::cout << "return oper" << std::endl; return oper; }
+  if (oper != "+" && oper != "-" && oper != "*" && oper != "/") { std::cout << "end of eval operator------return oper" << std::endl; return oper; }
 
 
   auto iter_1 {std::find_if_not(iter, str.end(), [](char ch) { return ch == ' '; })};
