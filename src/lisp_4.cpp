@@ -23,10 +23,14 @@ std::string eval(std::string str, int num, std::string check)
 
   auto iter {std::find_if_not(str.begin(), str.end(), [](char ch) { return ch == '('; })};
 
-  for (; *iter != ' '; ++iter)
+  std::cout << "----- start to get operator -----" << std::endl;
+
+  for (; *iter != ' ' ||  iter != str.end() ; ++iter)
   {
     oper += *iter;
   }
+
+  std::cout << "----- end to get operator -----" << std::endl;
 
   std::cout << "oper:" << oper << std::endl;
 
