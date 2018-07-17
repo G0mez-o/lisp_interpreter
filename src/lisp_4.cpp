@@ -16,7 +16,7 @@ bool check_str_cal(std::string str)
   return (check);
 }
 
-std::string eval(std::string str)
+std::string eval(std::string str, int num, std::string check)
 {
   std::list<std::string> ls; 
   std::string oper, car, cdr;
@@ -28,23 +28,26 @@ std::string eval(std::string str)
     oper += *iter;
   }
 
-  if (oper != "+" && oper != "-" && oper != "*" && oper != "/") { return oper; }
+  std::cout << "oper:" << oper << std::endl;
 
-  std::cout << oper << std::endl;
+  if (oper != "+" && oper != "-" && oper != "*" && oper != "/") { std::cout << "return oper" << std::endl; return oper; }
+
 
   auto iter_1 {std::find_if_not(iter, str.end(), [](char ch) { return ch == ' '; })};
   if (*iter_1 == '(')
   {
-    int count = 1;
-    for (; count != 0; ++iter_1)
+    int count = 0;
+    for (; ; ++iter_1)
     {
-      std::cout << *iter_1 << count << std::endl;
       car += *iter_1;
-      if (*iter_1 == ')') { --count; std::cout << "Hello"<< count << std::endl; }
+      if (*iter_1 == ')') { --count; }
 
       if (*iter_1 == '(') { ++count; }
 
+      std::cout << "car-->" << car << "---Hello---count:" << count << std::endl;
+
       if (count == 0) { break; }
+      
     }
   }
   else
@@ -52,8 +55,12 @@ std::string eval(std::string str)
     for (; *iter_1 != ' '; ++iter_1)
     {
       car += *iter_1;
+      std::cout << "car-->" << car << std::endl;
     }
   }
+
+  std::cout << "-----break-----" << std::endl;
+
   auto iter_2 {std::find_if_not(iter_1, str.end(), [](char ch) { return ch == ' '; })};
   if (*iter_2 == '(')
   {
@@ -65,6 +72,8 @@ std::string eval(std::string str)
 
       if (*iter_2 == '(') { ++count; }
 
+      std::cout << "cdr-->" << cdr << "---Hello---count" << count << std::endl;
+
       if (count == 0) { break; }
     }
   }
@@ -73,30 +82,38 @@ std::string eval(std::string str)
     for (; *iter_2 != ')'; ++iter_2)
     {
       cdr += *iter_2;
+      std::cout << "cdr-->" << cdr << std::endl;
     }
   }
+  std::cout << "-----break2-----" << std::endl;
 
-  double x = std::stod(eval(car));
-  double y = std::stod(eval(cdr));
+  std::cout << "eval " << check << "------eval------" << ++num  << std::endl;
+
+  double x = std::stod(eval(car, num, "car"));
+  double y = std::stod(eval(cdr, num, "cdr"));
   
   if (oper == "+")
   { 
     double val = x + y;
+    std::cout << "----- end of eval for + -----" << std::endl;
     return { std::to_string(val) };
   }
   if (oper == "-")
   {
     double val = x - y;
+    std::cout << "----- end of eval for - -----" << std::endl;
     return { std::to_string(val) };
   }
   if (oper == "*")
   {
     double val = x * y;
+    std::cout << "----- end of eval for * -----" << std::endl;
     return { std::to_string(val) };
   }
   if (oper == "/")
   {
     double val = x / y;
+    std::cout << "----- end of eval for / -----" << std::endl;
     return { std::to_string(val) };
   }
 }
@@ -167,7 +184,7 @@ int main(void)
     if (!check_depth(s)) { ++mis_count; continue; }
     s_exp_analysis(s);
     if (!check_str_cal(s)) {++mis_count; continue; }
-    else { std::cout<< eval(s) << std::endl; }
+    else { std::cout<< eval(s, 0, "all") << std::endl; }
   }
   return 0; 
 }
