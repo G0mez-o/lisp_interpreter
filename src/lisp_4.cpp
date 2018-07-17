@@ -25,16 +25,17 @@ std::string eval(std::string str, int num, std::string check)
 
   std::cout << "----- start to get operator -----" << std::endl;
 
-  for (; *iter != ' '; ++iter)
+  for (int cnt = 1; *iter != ' ' && *iter != ')'; ++iter, ++cnt)
   {
     oper += *iter;
-    std::cout << "oper:" << oper << std::endl;
+    std::cout << "oper:" << oper << "-----------get No." << cnt << std::endl;
   }
 
   std::cout << "----- end to get operator -----" << std::endl;
 
   if (oper != "+" && oper != "-" && oper != "*" && oper != "/") { std::cout << "end of eval operator------return oper" << std::endl; return oper; }
 
+  std::cout << "-----start to get car-----" << std::endl;
 
   auto iter_1 {std::find_if_not(iter, str.end(), [](char ch) { return ch == ' '; })};
   if (*iter_1 == '(')
@@ -52,19 +53,22 @@ std::string eval(std::string str, int num, std::string check)
       if (count == 0) { break; }
       
     }
+   std::cout << *iter_1 << "<-------point of iterator of car now for end"<< std::endl;
   }
   else
   {
     for (; *iter_1 != ' '; ++iter_1)
     {
       car += *iter_1;
-      std::cout << "car-->" << car << std::endl;
+      std::cout << "car-->" << car << "<--" << std::endl;
     }
   }
+  std::cout << "-----end of get car-----" << std::endl;
 
-  std::cout << "-----break-----" << std::endl;
+  std::cout << "-----start to get cdr-----" << std::endl;
 
-  auto iter_2 {std::find_if_not(iter_1, str.end(), [](char ch) { return ch == ' '; })};
+  auto iter_2 {std::find_if_not(iter_1, str.end(), [](char ch) { return ch == ' ' ; })};
+  std::cout << *iter_2 << "<-------point of iterator of cdr now for start" << std::endl;
   if (*iter_2 == '(')
   {
     int count = 0;
@@ -85,38 +89,47 @@ std::string eval(std::string str, int num, std::string check)
     for (; *iter_2 != ')'; ++iter_2)
     {
       cdr += *iter_2;
-      std::cout << "cdr-->" << cdr << std::endl;
+      std::cout << "cdr-->" << cdr << "<--" << std::endl;
     }
   }
-  std::cout << "-----break2-----" << std::endl;
+  std::cout << "-----end of get cdr-----" << std::endl;
 
   std::cout << "eval " << check << "------eval------" << ++num  << std::endl;
 
-  double x = std::stod(eval(car, num, "car"));
-  double y = std::stod(eval(cdr, num, "cdr"));
+  std::string car_;
+  car_ +="(";
+  car_ += car;
+  car_ += ")";
+  std::string cdr_;
+  cdr_ += "(";
+  cdr_ += cdr;
+  cdr_ += ")";
+
+  double x = std::stod(eval(car_, num, "car"));
+  double y = std::stod(eval(cdr_, num, "cdr"));
   
   if (oper == "+")
   { 
     double val = x + y;
-    std::cout << "----- end of eval for + -----" << std::endl;
+    std::cout << "----- end of eval for + ----- >>> ans::" << val << std::endl;
     return { std::to_string(val) };
   }
   if (oper == "-")
   {
     double val = x - y;
-    std::cout << "----- end of eval for - -----" << std::endl;
+    std::cout << "----- end of eval for - ----- >>> ans::" << val << std::endl;
     return { std::to_string(val) };
   }
   if (oper == "*")
   {
     double val = x * y;
-    std::cout << "----- end of eval for * -----" << std::endl;
+    std::cout << "----- end of eval for * ----- >>> ans::" << val << std::endl;
     return { std::to_string(val) };
   }
   if (oper == "/")
   {
     double val = x / y;
-    std::cout << "----- end of eval for / -----" << std::endl;
+    std::cout << "----- end of eval for / ----- >>> ans::" << val << std::endl;
     return { std::to_string(val) };
   }
 }
@@ -173,7 +186,7 @@ bool check_depth(std::string str)
   return true;
 }
 
-int main(void)
+int main()
 {
   introduction_sentence();
   unsigned int count = 0;
